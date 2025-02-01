@@ -61,6 +61,24 @@ pipeline {
                 '''
             }
         }
+        stage('Production End-To-End Testing') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                    reuseNode true
+                }
+            }
+
+            environment {
+                CI_ENVIRONMENT_URL = 'https://incomparable-raindrop-0e3e34.netlify.app'
+            }
+
+            steps {
+                sh '''
+                    npx playwright test  --reporter=html
+                '''
+            }
+        }
     }
 
 
